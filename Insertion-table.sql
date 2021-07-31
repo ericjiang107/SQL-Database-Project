@@ -125,3 +125,53 @@ INSERT INTO ServiceTicket(
 	(8, 4, 5),
 	(9, 3, 2),
 	(10, 5, 11);
+	
+-- Replaces null with 0 
+CREATE OR REPLACE PROCEDURE Zero_price(
+	price INTEGER
+)
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+	UPDATE serviceinvoices
+	SET price = 0
+	WHERE price = NULL;
+	COMMIT;
+END;
+$$;
+	
+-- adding customers
+CREATE OR REPLACE FUNCTION add_customer(
+	_customer_id INTEGER,
+	_first_name VARCHAR(150),
+	_last_name VARCHAR(150)
+)
+RETURNS void
+AS $$
+BEGIN 
+	INSERT INTO Customers(customer_id, first_name, last_name)
+	VALUES(_customer_id, _first_name, _last_name);
+END;
+$$
+LANGUAGE plpgsql;
+
+SELECT add_customer(13, 'Michael', 'Dwayne');
+
+
+-- adding new mechanic
+CREATE OR REPLACE FUNCTION add_mechanic(
+	_mechanic_id INTEGER,
+	_first_name VARCHAR(150),
+	_last_name VARCHAR(150)
+)
+RETURNS void
+AS $$
+BEGIN
+	INSERT INTO Mechanic(mechanic_id, first_name, last_name)
+	VALUES(_mechanic_id, _first_name, _last_name);
+END;
+$$
+LANGUAGE plpgsql
+
+SELECT add_mechanic(6, 'Morty', 'Smith')
